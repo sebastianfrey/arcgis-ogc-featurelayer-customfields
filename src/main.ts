@@ -13,9 +13,9 @@ const view = new MapView({
 });
 
 const workingLayer = new OGCFeatureLayer({
-  title: 'Country_Region Field is editable=true',
-  url: "https://demo.pygeoapi.io/covid-19",
-  collectionId: "cases",
+  title: 'name Field is editable=true',
+  url: "https://demo.ldproxy.net/vineyards",
+  collectionId: "vineyards",
   objectIdField: "OBJECTID",
   fields: [
     {
@@ -26,19 +26,19 @@ const workingLayer = new OGCFeatureLayer({
       type: "oid",
     },
     {
-      alias: "Country_Region",
+      alias: "name",
       editable: true,
-      name: "Country_Region",
-      nullable: true,
+      name: "name",
+      nullable: false,
       type: "string",
     },
   ],
 });
 
 const notWorkingLayer = new OGCFeatureLayer({
-  title: 'Country_Region Field is editable=false',
-  url: "https://demo.pygeoapi.io/covid-19",
-  collectionId: "cases",
+  title: 'name Field is editable=false',
+  url: "https://demo.ldproxy.net/vineyards",
+  collectionId: "vineyards",
   objectIdField: "OBJECTID",
   fields: [
     {
@@ -49,9 +49,9 @@ const notWorkingLayer = new OGCFeatureLayer({
       type: "oid",
     },
     {
-      alias: "Country_Region",
+      alias: "name",
       editable: false,
-      name: "Country_Region",
+      name: "name",
       nullable: false,
       type: "string",
     },
@@ -64,11 +64,11 @@ async function queryCountryRegionAttributeWhenLoaded(layer: OGCFeatureLayer) {
   const layerView = await view.whenLayerView(layer);
   await view.goTo(layer.fullExtent);
   await reactiveUtils.whenOnce(() => !layerView.updating);
-  const { features: [feature] } = await layerView.queryFeatures({ outFields: ['Country_Region'], num: 1 });
+  const { features: [feature] } = await layerView.queryFeatures({ outFields: ['name'], num: 1 });
   if (!feature) {
     throw new Error('No features found');
   }
-  console.info(`${layer.title}: Country_Region=${feature.attributes.Country_Region}`);
+  console.info(`${layer.title}: name=${feature.attributes.name}`);
 }
 
 queryCountryRegionAttributeWhenLoaded(workingLayer).catch(console.error);
